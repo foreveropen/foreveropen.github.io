@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foreveropen · Galaxy Profile</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page-bg: #020611;
+      --panel-bg: rgba(10, 18, 28, 0.54);
+      --panel-edge: rgba(149, 177, 255, 0.28);
+      --text-primary: #ebf7ff;
+      --text-secondary: #d2e6ff;
+      --text-muted: #8caed6;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-strong: rgba(255, 255, 255, 0.12);
+      --button-bg: rgba(17, 27, 40, 0.7);
+      --button-border: rgba(154, 209, 255, 0.34);
+      --shadow-soft: rgba(0, 0, 0, 0.28);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: #020611;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text-primary);
+    }
+
+    body {
+      position: relative;
+      overscroll-behavior: none;
+      background:
+        radial-gradient(circle at center, rgba(15, 24, 39, 0.78) 0%, rgba(2, 6, 17, 0.88) 32%, rgba(0, 0, 0, 0.95) 100%);
+    }
+
+    #galaxyWrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at center, rgba(38, 58, 85, 0.18), rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.96) 100%);
+    }
+
+    .star {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform, opacity, box-shadow, left, top, width, height;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 9vh 18px 10vh;
+      pointer-events: auto;
+    }
+
+    .title {
+      position: relative;
+      display: inline-block;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      letter-spacing: 0.38rem;
+      line-height: 1;
+      background: linear-gradient(90deg, #edf9ff 0%, #a7d8ff 18%, #d9d6ff 42%, #a4dcff 62%, #edf9ff 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 18px rgba(120, 200, 255, 0.55), 0 0 28px rgba(166, 145, 255, 0.28);
+      animation: textShine 12s ease-in-out infinite alternate;
+      filter: contrast(1.2) saturate(1.15);
+    }
+
+    .subtitle {
+      margin-top: 14px;
+      font-size: clamp(0.72rem, 1.5vw, 1.05rem);
+      letter-spacing: 0.18rem;
+      color: var(--text-secondary);
+      opacity: 0.9;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .action-btn,
+    .chip-btn {
+      appearance: none;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: var(--text-primary);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 12px;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 18px rgba(0,0,0,0.18);
+    }
+
+    .action-btn:hover,
+    .chip-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(194, 231, 255, 0.6);
+      background: rgba(19, 31, 46, 0.82);
+    }
+
+    .lang-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      border: 1px solid var(--button-border);
+      background: rgba(15, 22, 35, 0.55);
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .chip-btn {
+      padding: 8px 12px;
+      background: transparent;
+      border-radius: 999px;
+      border-color: transparent;
+      letter-spacing: 0.08rem;
+      opacity: 0.76;
+    }
+
+    .chip-btn.active {
+      background: rgba(135, 196, 255, 0.12);
+      border-color: rgba(153, 208, 255, 0.38);
+      opacity: 1;
+      box-shadow: inset 0 0 0 1px rgba(162, 213, 255, 0.15);
+    }
+
+    .info-panel {
+      position: relative;
+      z-index: 2;
+      width: min(820px, 82vw);
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid var(--panel-edge);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      -webkit-backdrop-filter: blur(9px);
+      backdrop-filter: blur(9px);
+      border-radius: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 38px rgba(0,0,0,0.26);
+    }
+
+    .resume-panel {
+      position: relative;
+      z-index: 2;
+      width: min(820px, 82vw);
+      margin-top: 18px;
+      padding: 18px 18px 12px;
+      border: 1px solid var(--panel-edge);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.014));
+      border-radius: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 16px 36px rgba(0,0,0,0.2);
+    }
+
+    .resume-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(159, 206, 255, 0.16);
+    }
+
+    .resume-badge {
+      font-size: 10px;
+      letter-spacing: 0.16rem;
+      color: #bfe8ff;
+      background: rgba(126, 188, 255, 0.08);
+      border: 1px solid rgba(153, 208, 255, 0.22);
+      padding: 6px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .resume-header h2 {
+      font-size: 14px;
+      letter-spacing: 0.14rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .info-grid,
+    .resume-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(170px, 1fr));
+      gap: 12px;
+      text-align: left;
+    }
+
+    .info-item,
+    .resume-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(153, 208, 255, 0.12);
+      border-radius: 16px;
+    }
+
+    .resume-card h3 {
+      font-size: 12px;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .resume-card p,
+    .resume-card li {
+      color: var(--text-primary);
+      font-size: 12px;
+      line-height: 1.7;
+      letter-spacing: 0.03rem;
+    }
+
+    .resume-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .resume-card li::before {
+      content: "• ";
+      color: #a9d8ff;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+    }
+
+    .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      background: rgba(139, 198, 255, 0.12);
+      color: #bfe8ff;
+      border: 1px solid rgba(164, 216, 255, 0.18);
+      font-size: 11px;
+    }
+
+    .info-item .value {
+      display: block;
+      font-size: 12px;
+      line-height: 1.7;
+      letter-spacing: 0.06rem;
+      color: var(--text-primary);
+    }
+
+
+    @keyframes textShine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding-top: 10vh; }
+      .title { letter-spacing: 0.2rem; }
+      .subtitle { letter-spacing: 0.08rem; }
+      .info-grid { grid-template-columns: 1fr; }
+      .action-btn, .chip-btn { letter-spacing: 0.08rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="galaxyWrap"></div>
+
+  <div class="content">
+    <div class="title">FOREVEROPEN</div>
+    <div class="subtitle" data-i18n="subtitle">全栈开发者 · 独立游戏开发者</div>
+
+    <div class="actions">
+      <a class="action-btn" href="https://github.com/foreveropen" target="_blank" rel="noopener noreferrer" data-i18n="primaryAction">查看项目</a>
+      <div class="lang-switcher" aria-label="language switcher">
+        <button class="chip-btn active" data-lang="zh" type="button">中文</button>
+        <button class="chip-btn" data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="item-header"><span class="icon">◈</span><span data-i18n="roleLabel">角色</span></div>
+          <span class="value" data-i18n="roleValue">开发者</span>
+        </div>
+        <div class="info-item">
+          <div class="item-header"><span class="icon">◎</span><span data-i18n="focusLabel">专注</span></div>
+          <span class="value" data-i18n="focusValue">Web / Game</span>
+        </div>
+        <div class="info-item">
+          <div class="item-header"><span class="icon">▣</span><span data-i18n="roleLabel2">信息</span></div>
+          <span class="value" data-i18n="infoValue">Portfolio / Notes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="resume-panel">
+      <div class="resume-header">
+        <div class="resume-badge">Resume</div>
+        <h2 data-i18n="resumeTitle">Profile</h2>
+      </div>
+
+      <div class="resume-grid">
+        <article class="resume-card">
+          <h3 data-i18n="aboutTitle">About</h3>
+          <p data-i18n="aboutText">专注于 Web 开发、游戏原型与交互体验设计，热爱将创意转化为可运行的界面与系统。</p>
+        </article>
+
+        <article class="resume-card">
+          <h3 data-i18n="skillsTitle">Skills</h3>
+          <ul>
+            <li data-i18n="skill1">HTML / CSS / JavaScript</li>
+            <li data-i18n="skill2">Node.js / Python / Tauri</li>
+            <li data-i18n="skill3">Game systems / UI / prototyping</li>
+          </ul>
+        </article>
+
+        <article class="resume-card">
+          <h3 data-i18n="contactTitle">Contact</h3>
+          <ul>
+            <li>GitHub: foreveropen</li>
+            <li data-i18n="contactLine">Portfolio / Notes / Experiments</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GLOBAL = {
+      CAMERA_START_RADIUS: 500,
+      CAMERA_START_YAW: 0,
+      CAMERA_START_PITCH: 20 * Math.PI / 180,
+      CAMERA_FOV: 360,
+      CAMERA_MIN_RADIUS: 400,
+      CAMERA_MAX_RADIUS: 600,
+      CAMERA_DRAG_SENSITIVITY: 0.001,
+      CAMERA_DAMP: 0.08,
+
+      BLACK_HOLE_RADIUS: 10,
+      STAR_COUNT: 128,
+      ROTATE_SPEED_INNER: 0.0075,
+      ROTATE_SPEED_OUTER: 0.00018,
+      DRIFT_TO_CENTER: 0.00001,
+      GRAVITY_CENTER_FORCE: 0.000028,
+
+      BASE_SIZE_MIN: 0.25,
+      BASE_SIZE_RAND: 0.95,
+      TWINKLE_SPEED_MIN: 0.012,
+      TWINKLE_SPEED_MAX: 0.034,
+
+      PARTICLE_SCALE_FACTOR: 2.2,
+      SHADOW_SCALE: 2.5,
+      SHADOW_ALPHA_FACTOR: 0.35,
+
+      DEATH_BRIGHTEN_DIST: 10,
+      SPAWN_OUTER_MIN: 200,
+      SPAWN_OUTER_MAX: 760,
+
+      PHYSICS_TIMESTEP: 19.67
+    };
+
+    const wrap = document.getElementById('galaxyWrap');
+    let W = window.innerWidth, H = window.innerHeight, CX = W / 2, CY = H / 2;
+
+    window.addEventListener('resize', () => {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      CX = W / 2;
+      CY = H / 2;
+    });
+
+    const camera = {
+      radius: GLOBAL.CAMERA_START_RADIUS,
+      targetRadius: GLOBAL.CAMERA_START_RADIUS,
+      yaw: GLOBAL.CAMERA_START_YAW,
+      pitch: GLOBAL.CAMERA_START_PITCH,
+      targetYaw: GLOBAL.CAMERA_START_YAW,
+      targetPitch: GLOBAL.CAMERA_START_PITCH,
+      fov: GLOBAL.CAMERA_FOV
+    };
+
+    let isDragging = false;
+    let lastX = 0, lastY = 0;
+
+    document.addEventListener('mousedown', e => {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      camera.targetYaw -= dx * GLOBAL.CAMERA_DRAG_SENSITIVITY;
+      camera.targetPitch += dy * GLOBAL.CAMERA_DRAG_SENSITIVITY;
+      camera.targetPitch = Math.max(-Math.PI / 2 + 0.08, Math.min(Math.PI / 2 - 0.08, camera.targetPitch));
+    });
+
+    document.addEventListener('mouseup', () => isDragging = false);
+    document.addEventListener('mouseleave', () => isDragging = false);
+
+    document.addEventListener('wheel', e => {
+      e.preventDefault();
+      camera.targetRadius += e.deltaY * 0.35;
+      camera.targetRadius = Math.max(GLOBAL.CAMERA_MIN_RADIUS, Math.min(GLOBAL.CAMERA_MAX_RADIUS, camera.targetRadius));
+    }, { passive: false });
+
+    function hslToRgb(h, s, l) {
+      let r, g, b;
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1 / 6) return p + (q - p) * 6 * t;
+          if (t < 1 / 2) return q;
+          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    const translations = {
+      zh: {
+        subtitle: '全栈开发者 · 独立游戏开发者',
+        primaryAction: '查看项目',
+        roleLabel: '角色',
+        roleValue: '开发者',
+        focusLabel: '专注',
+        focusValue: 'Web / Game',
+        roleLabel2: '信息',
+        infoValue: 'Portfolio / Notes',
+        resumeTitle: 'Profile',
+        aboutTitle: '简介',
+        aboutText: '专注于 Web 开发、游戏原型与交互体验设计，热爱将创意转化为可运行的界面与系统。',
+        skillsTitle: '能力',
+        skill1: 'HTML / CSS / JavaScript',
+        skill2: 'Node.js / Python / Tauri',
+        skill3: 'Game systems / UI / prototyping',
+        contactTitle: '联系',
+        contactLine: '作品集 / 笔记 / 实验室'
+      },
+      en: {
+        subtitle: 'Full Stack Developer · Indie Game Developer',
+        primaryAction: 'View Projects',
+        roleLabel: 'Role',
+        roleValue: 'Developer',
+        focusLabel: 'Focus',
+        focusValue: 'Web / Game',
+        roleLabel2: 'Info',
+        infoValue: 'Portfolio / Notes',
+        resumeTitle: 'Profile',
+        aboutTitle: 'About',
+        aboutText: 'Focused on web development, game prototyping, and interaction design, turning ideas into usable interfaces and systems.',
+        skillsTitle: 'Skills',
+        skill1: 'HTML / CSS / JavaScript',
+        skill2: 'Node.js / Python / Tauri',
+        skill3: 'Game systems / UI / prototyping',
+        contactTitle: 'Contact',
+        contactLine: 'Portfolio / Notes / Experiments'
+      }
+    };
+
+    const i18nNodes = document.querySelectorAll('[data-i18n]');
+    const langButtons = document.querySelectorAll('.chip-btn');
+
+    function setLanguage(lang) {
+      const map = translations[lang] || translations.zh;
+      i18nNodes.forEach(node => {
+        const key = node.dataset.i18n;
+        if (map[key]) node.textContent = map[key];
+      });
+
+      document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+      langButtons.forEach(button => {
+        const active = button.dataset.lang === lang;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    const preferredLang = navigator.language && navigator.language.toLowerCase().startsWith('en') ? 'en' : 'zh';
+    setLanguage(preferredLang);
+
+    langButtons.forEach(button => {
+      button.addEventListener('click', () => setLanguage(button.dataset.lang));
+    });
+
+    const particles = [];
+
+    class Particle {
+      constructor() {
+        this.el = document.createElement('div');
+        this.el.className = 'star';
+        wrap.appendChild(this.el);
+        this.alive = true;
+        this.reset();
+      }
+
+      reset() {
+        const distance = GLOBAL.SPAWN_OUTER_MIN + Math.random() * (GLOBAL.SPAWN_OUTER_MAX - GLOBAL.SPAWN_OUTER_MIN);
+        const thickness = (Math.random() - 0.5) * 60;
+        const armIndex = Math.floor(Math.random() * 4);
+        const armAngle = (Math.PI * 2 / 4) * armIndex;
+        const spread = (Math.random() - 0.5) * 130;
+        const angle = armAngle + distance * 0.0055 + spread * 0.018;
+
+        this.x3 = Math.cos(angle) * distance;
+        this.y3 = Math.sin(angle) * distance;
+        this.z3 = thickness;
+
+        this.baseSize = GLOBAL.BASE_SIZE_MIN + Math.random() * GLOBAL.BASE_SIZE_RAND;
+        this.distance = distance;
+
+        const distNorm = Math.max(0, (distance - GLOBAL.BLACK_HOLE_RADIUS) / 750);
+        this.rotationSpeed = GLOBAL.ROTATE_SPEED_INNER * (1 - distNorm) + GLOBAL.ROTATE_SPEED_OUTER * distNorm;
+
+        this.vx3 = 0;
+        this.vy3 = 0;
+        this.vz3 = 0;
+
+        this.baseHue = [210, 190, 35, 45, 260][Math.floor(Math.random() * 5)];
+        this.twinklePhase = Math.random() * Math.PI * 4;
+        this.twinkleSpeed = GLOBAL.TWINKLE_SPEED_MIN + Math.random() * (GLOBAL.TWINKLE_SPEED_MAX - GLOBAL.TWINKLE_SPEED_MIN);
+        this.brightness = 0.28 + Math.random() * 0.52;
+        this.deathBrightScale = 1.0;
+        this.alive = true;
+      }
+
+      update(dt) {
+        if (!this.alive) return;
+        this.twinklePhase += this.twinkleSpeed * dt;
+
+        const currentAngle = Math.atan2(this.y3, this.x3);
+        const newAngle = currentAngle + this.rotationSpeed * dt;
+        this.x3 = Math.cos(newAngle) * this.distance;
+        this.y3 = Math.sin(newAngle) * this.distance;
+
+        this.vx3 *= Math.pow(0.989, dt);
+        this.vy3 *= Math.pow(0.989, dt);
+        this.vz3 *= Math.pow(0.989, dt);
+
+        const dxG = -this.x3;
+        const dyG = -this.y3;
+        const dzG = -this.z3;
+        const distG = Math.hypot(dxG, dyG, dzG);
+
+        if (distG > GLOBAL.BLACK_HOLE_RADIUS + 8) {
+          const gForce = GLOBAL.GRAVITY_CENTER_FORCE * dt;
+          this.vx3 += (dxG / distG) * gForce;
+          this.vy3 += (dyG / distG) * gForce;
+          this.vz3 += (dzG / distG) * gForce;
+
+          const driftForce = GLOBAL.DRIFT_TO_CENTER * dt;
+          this.vx3 += (dxG / distG) * driftForce;
+          this.vy3 += (dyG / distG) * driftForce;
+          this.vz3 += (dzG / distG) * driftForce;
+        }
+
+        this.x3 += this.vx3 * dt;
+        this.y3 += this.vy3 * dt;
+        this.z3 += this.vz3 * dt;
+
+        const distToBlack = Math.hypot(this.x3, this.y3, this.z3);
+        if (distToBlack < GLOBAL.DEATH_BRIGHTEN_DIST) {
+          const t = 1.0 - (distToBlack - GLOBAL.BLACK_HOLE_RADIUS) / (GLOBAL.DEATH_BRIGHTEN_DIST - GLOBAL.BLACK_HOLE_RADIUS);
+          this.deathBrightScale = 1.0 + t * 2.2;
+        } else {
+          this.deathBrightScale = 1.0;
+        }
+
+        if (distToBlack <= GLOBAL.BLACK_HOLE_RADIUS) {
+          this.alive = false;
+        }
+
+        const cosYaw = Math.cos(camera.yaw);
+        const sinYaw = Math.sin(camera.yaw);
+        const cosPitch = Math.cos(camera.pitch);
+        const sinPitch = Math.sin(camera.pitch);
+
+        let x1 = this.x3 * cosYaw - this.y3 * sinYaw;
+        let y1 = this.x3 * sinYaw + this.y3 * cosYaw;
+        let z1 = this.z3;
+
+        let x2 = x1;
+        let y2 = y1 * cosPitch - z1 * sinPitch;
+        let z2 = y1 * sinPitch + z1 * cosPitch;
+
+        const perspective = camera.fov / (camera.radius + z2);
+        this.screenX = CX + x2 * perspective;
+        this.screenY = CY + y2 * perspective;
+        this.scale = perspective;
+        this.depth = z2;
+      }
+
+      renderDom() {
+        if (!this.alive) {
+          this.el.style.display = 'none';
+          return;
+        }
+        this.el.style.display = '';
+
+        const twinkle = 0.62 + 0.38 * Math.sin(this.twinklePhase);
+        const depthFade = Math.max(0.32, 1 + this.depth * 0.00042);
+        const coreAlpha = this.brightness * twinkle / depthFade * this.deathBrightScale;
+        const hue = (this.baseHue + 22 * Math.sin(this.twinklePhase)) % 360;
+        const [r, g, b] = hslToRgb(hue / 360, 0.65, 0.52 * twinkle);
+        const pxSize = Math.max(0.4, this.baseSize * this.scale * GLOBAL.PARTICLE_SCALE_FACTOR * Math.sqrt(this.deathBrightScale));
+
+        this.el.style.left = `${this.screenX}px`;
+        this.el.style.top = `${this.screenY}px`;
+        this.el.style.width = `${pxSize}px`;
+        this.el.style.height = `${pxSize}px`;
+        this.el.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${coreAlpha})`;
+        this.el.style.boxShadow = `0 0 ${pxSize * GLOBAL.SHADOW_SCALE}px ${pxSize * 0.8}px rgba(${r}, ${g}, ${b}, ${coreAlpha * GLOBAL.SHADOW_ALPHA_FACTOR})`;
+      }
+
+      respawn() {
+        this.reset();
+      }
+    }
+
+    for (let i = 0; i < GLOBAL.STAR_COUNT; i++) {
+      particles.push(new Particle());
+    }
+
+    let lastTimestamp = performance.now();
+    function animate(timestamp) {
+      const deltaMs = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+      const dt = Math.min(3, deltaMs / GLOBAL.PHYSICS_TIMESTEP);
+
+      camera.yaw += (camera.targetYaw - camera.yaw) * GLOBAL.CAMERA_DAMP;
+      camera.pitch += (camera.targetPitch - camera.pitch) * GLOBAL.CAMERA_DAMP;
+      camera.radius += (camera.targetRadius - camera.radius) * GLOBAL.CAMERA_DAMP;
+
+      for (const p of particles) {
+        p.update(dt);
+        p.renderDom();
+        if (!p.alive) p.respawn();
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
