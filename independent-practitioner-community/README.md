@@ -61,3 +61,14 @@
 - [种子报名指南](seed-application-guide.md)
 - [答辩题库](interview-question.md)
 - [风险声明](risk-statement.md)
+- [更新日志](CHANGELOG.md)
+
+## 在线官网
+
+社群官网已上线：https://foreveropen.github.io/independent-practitioner-community/
+
+## 更新历史
+
+| 时间 | 版本 | 内容 |
+|------|------|------|
+| 2026-09-26 14:17 CST | v0.1.0 | 初始版本：创建四份核心文档（README/报名指南/答辩题库/风险声明），上线社群官网，部署至 GitHub Pages |
