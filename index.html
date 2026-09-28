@@ -409,25 +409,6 @@
       margin-top: 2px;
     }
 
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .project-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 8px;
-      border-radius: 999px;
-      background: rgba(136, 204, 255, 0.08);
-      border: 1px solid rgba(149, 177, 255, 0.14);
-      color: #bfe8ff;
-      font-size: 10px;
-      letter-spacing: 0.07rem;
-      text-transform: uppercase;
-    }
-
     .project-link {
       color: #a9d9ff;
       text-decoration: none;
@@ -540,7 +521,7 @@
 
       <div class="resume-grid" style="margin-top:12px">
         <article class="resume-card" style="grid-column:1 / -1">
-          <h3 data-i18n="projectsTitle">精选项目</h3>
+          <h3 data-i18n="projectsTitle">项目</h3>
           <div id="projects-list" class="project-grid"></div>
         </article>
       </div>
@@ -687,7 +668,7 @@
         skill3: '方向：交互原型 / 小游戏 / UI',
         contactTitle: '联系',
         contactLine: '作品集 / 笔记 / 实验持续更新',
-        projectsTitle: '精选项目',
+        projectsTitle: '项目',
         proj1Name: '心诚则灵 · 易经六爻占卜',
         proj1Desc: ' — 像素古风纯前端排盘工具，零依赖，打开即用。',
         proj2Name: '独立实践者共建实验社群',
@@ -711,7 +692,7 @@
         skill3: 'Focus: Prototypes / Games / UI',
         contactTitle: 'Contact',
         contactLine: 'Portfolio / Notes / Experiments',
-        projectsTitle: 'Selected Projects',
+        projectsTitle: 'Projects',
         proj1Name: 'ChengZeLing · I Ching Divination',
         proj1Desc: ' — pixel-style frontend casting tool, zero dependencies, open and use.',
         proj2Name: 'Independent Practitioner Community',
@@ -751,6 +732,8 @@
         const name = normalizeWhitespace(match[1]);
         const url = match[2];
         const description = normalizeWhitespace(match[3]);
+        const normalized = `${name} ${description}`.toLowerCase();
+        if (/(社群|社区|community|group)/i.test(normalized)) continue;
         output.push({ name, url, description });
       }
 
@@ -768,7 +751,7 @@
             { name: 'live-prediction', description: '实时预测与数据监控演示工程，面向可视化反馈场景。', url: 'https://github.com/foreveropen/live-prediction' },
             { name: 'xczl', description: '纯前端易经六爻占卜工具，适合个人创作与快速原型验证。', url: 'https://github.com/foreveropen/xczl' },
             { name: 'baofu', description: '面向内容展示与轻应用的静态站点实验，强调清晰结构。', url: 'https://github.com/foreveropen/baofu' },
-            { name: 'independent-practitioner-community', description: '独立实践者社群与协作实验项目，关注自组织共创。', url: 'https://github.com/foreveropen/independent-practitioner-community' }
+            { name: 'xiaoyouxi', description: '独立游戏与交互原型实验项目，关注玩法与界面反馈。', url: 'https://github.com/foreveropen/xiaoyouxi' }
           ]
         },
         en: {
@@ -780,7 +763,7 @@
             { name: 'live-prediction', description: 'Real-time prediction and monitoring demo built for visual feedback workflows.', url: 'https://github.com/foreveropen/live-prediction' },
             { name: 'xczl', description: 'Pure frontend I Ching divination tool for personal creative and prototype experiments.', url: 'https://github.com/foreveropen/xczl' },
             { name: 'baofu', description: 'Static site experiment focused on content clarity, minimal layouts, and lightweight apps.', url: 'https://github.com/foreveropen/baofu' },
-            { name: 'independent-practitioner-community', description: 'Self-organized experimentation and collaboration project for independent builders.', url: 'https://github.com/foreveropen/independent-practitioner-community' }
+            { name: 'xiaoyouxi', description: 'Indie game and interaction prototype project focused on play and interface feedback.', url: 'https://github.com/foreveropen/xiaoyouxi' }
           ]
         }
       };
@@ -849,7 +832,6 @@
       const projectList = document.getElementById('projects-list');
       if (!projectList) return;
 
-      const tags = ['AI', 'Web', 'Game', 'Tool'];
       projectList.innerHTML = items.map((item, index) => `
         <article class="project-card">
           <div class="project-top">
@@ -858,9 +840,6 @@
           </div>
           <p class="project-desc">${item.description}</p>
           <div class="project-meta">
-            <div class="project-tags">
-              <span class="project-tag">${tags[index % tags.length]}</span>
-            </div>
             <a href="${item.url}" target="_blank" rel="noopener" class="project-link">Repo</a>
           </div>
         </article>
