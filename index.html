@@ -169,6 +169,54 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 38px rgba(0,0,0,0.26);
     }
 
+    .status-strip {
+      position: relative;
+      z-index: 2;
+      width: min(820px, 82vw);
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .status-card {
+      padding: 12px 14px;
+      background: rgba(12, 20, 31, 0.58);
+      border: 1px solid rgba(145, 194, 255, 0.18);
+      border-radius: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 14px 28px rgba(0,0,0,0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .status-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .status-value {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 24px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 700;
+      letter-spacing: 0.04rem;
+    }
+
+    .visitor-badge {
+      display: block;
+      max-width: 100%;
+      height: 26px;
+      border-radius: 8px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(142, 216, 255, 0.22));
+    }
+
     .resume-panel {
       position: relative;
       z-index: 2;
@@ -289,6 +337,101 @@
       color: var(--text-primary);
     }
 
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px 16px 14px;
+      background: linear-gradient(180deg, rgba(18, 28, 40, 0.9), rgba(9, 17, 27, 0.88));
+      border: 1px solid rgba(149, 177, 255, 0.18);
+      border-radius: 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 18px 26px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(167, 216, 255, 0.38);
+    }
+
+    .project-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .project-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: rgba(143, 203, 255, 0.12);
+      border: 1px solid rgba(149, 177, 255, 0.22);
+      color: #bfe8ff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .project-title {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04rem;
+      line-height: 1.5;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.8;
+      letter-spacing: 0.02rem;
+      flex: 1;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .project-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(136, 204, 255, 0.08);
+      border: 1px solid rgba(149, 177, 255, 0.14);
+      color: #bfe8ff;
+      font-size: 10px;
+      letter-spacing: 0.07rem;
+      text-transform: uppercase;
+    }
+
+    .project-link {
+      color: #a9d9ff;
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 0.08rem;
+      text-transform: uppercase;
+    }
 
     @keyframes textShine {
       0% { background-position: 0% 50%; }
@@ -319,6 +462,21 @@
       </div>
     </div>
 
+    <div class="status-strip">
+      <div class="status-card">
+        <span class="status-label">Status</span>
+        <div class="status-value">开发中</div>
+      </div>
+      <div class="status-card">
+        <span class="status-label">Focus</span>
+        <div class="status-value">Web / Game</div>
+      </div>
+      <div class="status-card">
+        <span class="status-label">Visits</span>
+        <img class="visitor-badge" src="https://komarev.com/ghpvc/?username=foreveropen&label=%E8%AE%BF%E9%97%AE%E9%87%8F&color=8ED8FF&style=flat-square" alt="profile views" />
+      </div>
+    </div>
+
     <div class="info-panel">
       <div class="info-grid">
         <div class="info-item">
@@ -345,12 +503,12 @@
       <div class="resume-grid">
         <article class="resume-card">
           <h3 data-i18n="aboutTitle">About</h3>
-          <p data-i18n="aboutText">专注于 Web 开发、交互体验和游戏原型设计，喜欢把创意转化为清晰、稳定、有存在感的界面与系统。</p>
+          <p id="about-text" data-i18n="aboutText">专注于 Web 开发、交互体验和游戏原型设计，喜欢把创意转化为清晰、稳定、有存在感的界面与系统。</p>
         </article>
 
         <article class="resume-card">
           <h3 data-i18n="skillsTitle">Skills</h3>
-          <ul>
+          <ul id="skills-list">
             <li data-i18n="skill1">前端：HTML / CSS / JavaScript</li>
             <li data-i18n="skill2">后端：Node.js / Python / Tauri</li>
             <li data-i18n="skill3">方向：交互原型 / 小游戏 / UI</li>
@@ -359,7 +517,7 @@
 
         <article class="resume-card">
           <h3 data-i18n="contactTitle">Contact</h3>
-          <ul>
+          <ul id="contact-list">
             <li><a href="https://github.com/foreveropen" target="_blank" rel="noopener" style="color:#bfe8ff;text-decoration:none">GitHub: foreveropen</a></li>
             <li data-i18n="contactLine">作品集 / 笔记 / 实验持续更新</li>
           </ul>
@@ -369,22 +527,7 @@
       <div class="resume-grid" style="margin-top:12px">
         <article class="resume-card" style="grid-column:1 / -1">
           <h3 data-i18n="projectsTitle">精选项目</h3>
-          <ul>
-            <li>
-              <a href="https://github.com/foreveropen/xczl" target="_blank" rel="noopener" style="color:#bfe8ff;text-decoration:none">
-                <b data-i18n="proj1Name">心诚则灵 · 易经六爻占卜</b>
-              </a>
-              <span data-i18n="proj1Desc"> — 像素古风纯前端排盘工具，零依赖，打开即用。</span>
-              <a href="https://foreveropen.github.io/xczl/" target="_blank" rel="noopener" style="color:#8ed8ff;text-decoration:none"> [在线体验]</a>
-            </li>
-            <li>
-              <a href="https://github.com/foreveropen/foreveropen.github.io/tree/main/independent-practitioner-community" target="_blank" rel="noopener" style="color:#bfe8ff;text-decoration:none">
-                <b data-i18n="proj2Name">独立实践者共建实验社群</b>
-              </a>
-              <span data-i18n="proj2Desc"> — 独立创作者共建的自治实验社群，种子招募中。</span>
-              <a href="https://foreveropen.github.io/independent-practitioner-community/" target="_blank" rel="noopener" style="color:#8ed8ff;text-decoration:none"> [进入官网]</a>
-            </li>
-          </ul>
+          <div id="projects-list" class="project-grid"></div>
         </article>
       </div>
     </div>
@@ -495,7 +638,16 @@
       return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
     }
 
-    const translations = {
+/**
+ * GitHub Profile Sync Strategy
+ * --------------------------------
+ * 1. README.md in the GitHub profile repository is treated as the source of truth.
+ * 2. This page only pulls the required sections used by the homepage, instead of duplicating the entire README.
+ * 3. The site keeps a small fallback dataset in case the network or GitHub raw endpoint is unavailable.
+ * 4. The language toggle reads the same structured data for zh/en, so the UI remains synchronized.
+ */
+    const PROFILE_SOURCE_URL = 'https://raw.githubusercontent.com/foreveropen/foreveropen/main/README.md';
+    const FALLBACK_PROFILE = {
       zh: {
         subtitle: '全栈开发者 · 独立游戏开发者',
         primaryAction: '查看项目',
@@ -546,15 +698,168 @@
       }
     };
 
+    const appState = {
+      lang: 'zh',
+      profile: structuredClone(FALLBACK_PROFILE)
+    };
+
     const i18nNodes = document.querySelectorAll('[data-i18n]');
     const langButtons = document.querySelectorAll('.chip-btn');
 
+    function normalizeWhitespace(value) {
+      return String(value || '').replace(/\r/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function extractSection(markdown, heading) {
+      const pattern = new RegExp(`##\\s*${heading}\\s*\\n([\\s\\S]*?)(?=\\n##\\s*|$)`, 'i');
+      const match = markdown.match(pattern);
+      return match ? match[1].trim() : '';
+    }
+
+    function extractListItems(section) {
+      return Array.from(section.matchAll(/^-\s+(.+)/g), match => normalizeWhitespace(match[1]))
+        .filter(Boolean);
+    }
+
+    function parseProjectItems(section) {
+      const output = [];
+      const itemPattern = /-\s+\[\*\*(.+?)\*\*\]\((https?:\/\/[^)]+)\)\s*[-—:]?\s*([^\n]+)/g;
+      let match;
+
+      while ((match = itemPattern.exec(section))) {
+        const name = normalizeWhitespace(match[1]);
+        const url = match[2];
+        const description = normalizeWhitespace(match[3]);
+        output.push({ name, url, description });
+      }
+
+      return output;
+    }
+
+    function parseProfileData(markdown) {
+      const profile = {
+        zh: {
+          subtitle: '全栈开发者 · 独立游戏开发者',
+          aboutText: '专注于 Web 开发、交互体验和游戏原型设计，喜欢把创意转化为清晰、稳定、有存在感的界面与系统。',
+          skills: ['前端：HTML / CSS / JavaScript', '后端：Node.js / Python / Tauri', '方向：交互原型 / 小游戏 / UI'],
+          contact: ['GitHub: foreveropen', '作品集 / 笔记 / 实验持续更新'],
+          projects: [
+            { name: '心诚则灵 · 易经六爻占卜', description: '像素古风纯前端排盘工具，零依赖，打开即用。', url: 'https://github.com/foreveropen/xczl' },
+            { name: '独立实践者共建实验社群', description: '独立创作者共建的自治实验社群，种子招募中。', url: 'https://github.com/foreveropen/independent-practitioner-community' }
+          ]
+        },
+        en: {
+          subtitle: 'Full Stack Developer · Indie Game Developer',
+          aboutText: 'Focused on web development, interaction design, and game prototyping, turning ideas into clean, solid interfaces and systems.',
+          skills: ['Frontend: HTML / CSS / JavaScript', 'Backend: Node.js / Python / Tauri', 'Focus: Prototypes / Games / UI'],
+          contact: ['GitHub: foreveropen', 'Portfolio / Notes / Experiments'],
+          projects: [
+            { name: 'ChengZeLing · I Ching Divination', description: 'Pixel-style frontend casting tool, zero dependencies, open and use.', url: 'https://github.com/foreveropen/xczl' },
+            { name: 'Independent Practitioner Community', description: 'A self-governing experiment community for independent creators, recruiting seed members.', url: 'https://github.com/foreveropen/independent-practitioner-community' }
+          ]
+        }
+      };
+
+      // 读取中文区块：个人简介 / 技能 / 当前方向 / 项目 / 联系方式
+      const zhIntro = extractSection(markdown, '个人简介');
+      const zhSkills = extractSection(markdown, '核心能力');
+      const zhFocus = extractSection(markdown, '当前方向');
+      const zhProjects = extractSection(markdown, '代表项目');
+      const zhContact = extractSection(markdown, '联系方式');
+
+      // 读取英文区块：About Me / Core Skills / Current Focus / Featured Projects / Contact
+      const enIntro = extractSection(markdown, 'About Me');
+      const enSkills = extractSection(markdown, 'Core Skills');
+      const enFocus = extractSection(markdown, 'Current Focus');
+      const enProjects = extractSection(markdown, 'Featured Projects');
+      const enContact = extractSection(markdown, 'Contact');
+
+      // 仅保留当前页面需要的模块，避免大量复制 README 全内容。
+      if (zhIntro) {
+        const paragraphs = zhIntro.split(/\n\s*\n/).map(normalizeWhitespace).filter(Boolean);
+        profile.zh.aboutText = paragraphs[0] || profile.zh.aboutText;
+      }
+      if (zhSkills) profile.zh.skills = extractListItems(zhSkills);
+      if (zhFocus) profile.zh.skills = profile.zh.skills.length ? profile.zh.skills : extractListItems(zhFocus);
+      if (zhProjects) profile.zh.projects = parseProjectItems(zhProjects).slice(0, 2);
+      if (zhContact) {
+        const contactItems = Array.from(zhContact.matchAll(/-\s+(.+)/g), match => normalizeWhitespace(match[1]));
+        if (contactItems.length) profile.zh.contact = contactItems;
+      }
+
+      if (enIntro) {
+        const paragraphs = enIntro.split(/\n\s*\n/).map(normalizeWhitespace).filter(Boolean);
+        profile.en.aboutText = paragraphs[0] || profile.en.aboutText;
+      }
+      if (enSkills) profile.en.skills = extractListItems(enSkills);
+      if (enFocus) profile.en.skills = profile.en.skills.length ? profile.en.skills : extractListItems(enFocus);
+      if (enProjects) profile.en.projects = parseProjectItems(enProjects).slice(0, 2);
+      if (enContact) {
+        const contactItems = Array.from(enContact.matchAll(/-\s+(.+)/g), match => normalizeWhitespace(match[1]));
+        if (contactItems.length) profile.en.contact = contactItems;
+      }
+
+      return profile;
+    }
+
+    function renderSkillList(items) {
+      const skillList = document.getElementById('skills-list');
+      if (!skillList) return;
+      skillList.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+    }
+
+    function renderContactList(items) {
+      const contactList = document.getElementById('contact-list');
+      if (!contactList) return;
+      const rendered = items.map(item => {
+        if (/^GitHub:/i.test(item)) {
+          return `<li><a href="https://github.com/foreveropen" target="_blank" rel="noopener" style="color:#bfe8ff;text-decoration:none">${item}</a></li>`;
+        }
+        return `<li>${item}</li>`;
+      });
+      contactList.innerHTML = rendered.join('');
+    }
+
+    function renderProjectList(items) {
+      const projectList = document.getElementById('projects-list');
+      if (!projectList) return;
+
+      const tags = ['Web', 'Game', 'UI', 'Prototype'];
+      projectList.innerHTML = items.map((item, index) => `
+        <article class="project-card">
+          <div class="project-top">
+            <span class="project-index">${String(index + 1).padStart(2, '0')}</span>
+            <a href="${item.url}" target="_blank" rel="noopener" class="project-title">${item.name}</a>
+          </div>
+          <p class="project-desc">${item.description}</p>
+          <div class="project-meta">
+            <div class="project-tags">
+              <span class="project-tag">${tags[index % tags.length]}</span>
+            </div>
+            <a href="${item.url}" target="_blank" rel="noopener" class="project-link">GitHub</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
     function setLanguage(lang) {
-      const map = translations[lang] || translations.zh;
+      const map = appState.profile[lang] || appState.profile.zh;
+      appState.lang = lang;
+
+      // 统一更新文本节点，不再手工维护重复字符串。
       i18nNodes.forEach(node => {
         const key = node.dataset.i18n;
         if (map[key]) node.textContent = map[key];
       });
+
+      const aboutTextNode = document.getElementById('about-text');
+      if (aboutTextNode && map.aboutText) {
+        aboutTextNode.textContent = map.aboutText;
+      }
+
+      renderSkillList(map.skills || []);
+      renderContactList(map.contact || []);
+      renderProjectList(map.projects || []);
 
       document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
       langButtons.forEach(button => {
@@ -564,8 +869,23 @@
       });
     }
 
+    async function loadProfileFromGitHub() {
+      try {
+        const response = await fetch(PROFILE_SOURCE_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`GitHub raw fetch failed: ${response.status}`);
+        const markdown = await response.text();
+        appState.profile = parseProfileData(markdown);
+        setLanguage(appState.lang);
+      } catch (error) {
+        console.warn('[ProfileSync] Using fallback local data because GitHub README could not be loaded:', error);
+        setLanguage(appState.lang);
+      }
+    }
+
     const preferredLang = navigator.language && navigator.language.toLowerCase().startsWith('en') ? 'en' : 'zh';
-    setLanguage(preferredLang);
+    appState.lang = preferredLang;
+    setLanguage(appState.lang);
+    loadProfileFromGitHub();
 
     langButtons.forEach(button => {
       button.addEventListener('click', () => setLanguage(button.dataset.lang));
